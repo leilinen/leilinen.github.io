@@ -1,0 +1,63 @@
+<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="linux snacks"><meta name="keywords" content="linux"><meta name="author" content="leiline"><meta name="copyright" content="leiline"><title>linux snacks | 李林林的小站</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.6.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.6.1"><link rel="dns-prefetch" href="https://cdn.staticfile.org"><link rel="dns-prefetch" href="https://cdn.bootcss.com"><link rel="dns-prefetch" href="https://creativecommons.org"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#linux的软连接与硬链接"><span class="toc-number">1.</span> <span class="toc-text">linux的软连接与硬链接</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#inode"><span class="toc-number">1.1.</span> <span class="toc-text">inode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#硬链接"><span class="toc-number">1.2.</span> <span class="toc-text">硬链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#软链接"><span class="toc-number">1.3.</span> <span class="toc-text">软链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">1.5.</span> <span class="toc-text">参考</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#sh-filename-与-filename的区别"><span class="toc-number">2.</span> <span class="toc-text">sh filename 与 ./ filename的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#修改dns"><span class="toc-number">3.</span> <span class="toc-text">修改dns</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#临时设置"><span class="toc-number">3.1.</span> <span class="toc-text">临时设置</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">leiline</div><div class="author-info__description text-center">知道你要去很远的地方，但请一定记得回头看看</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">35</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">16</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">3</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">李林林的小站</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus"><a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span></div><div id="post-info"><div id="post-title">linux snacks</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2018-04-11</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/technology/">technology</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>记录一些linux的小问题，本文与<a href="https://leilinen.github.io/2018/03/27/python-tips" target="_blank" rel="noopener">python-snacks</a>类似，杂谈linux。</p>
+<a id="more"></a>
+
+<h1 id="linux的软连接与硬链接"><a href="#linux的软连接与硬链接" class="headerlink" title="linux的软连接与硬链接"></a>linux的软连接与硬链接</h1><p>在linux中常见的是软连接，而实际上还有一种链接称为硬链接(hard link)，那么他们之间有什么区别那？</p>
+<h2 id="inode"><a href="#inode" class="headerlink" title="inode"></a>inode</h2><p>在linux存储中，每一个文件都有一个存储文件元信息的区域，叫做inode。inode中存储的内容包含以下内容：</p>
+<blockquote>
+<p>文件的字节数</p>
+<p>文件拥有者的User ID</p>
+<p>文件的Group ID</p>
+<p>文件的读、写、执行权限</p>
+<p>文件的时间戳，共有三个：ctime指inode上一次变动的时间，mtime指文件内容上一次变动的时间，atime指文件上一次打开的时间。</p>
+<p>链接数，即有多少文件名指向这个inode</p>
+<p>文件数据block的位置</p>
+</blockquote>
+<p>可以说，inode表示一个文件的属性。</p>
+<h2 id="硬链接"><a href="#硬链接" class="headerlink" title="硬链接"></a>硬链接</h2><p><strong>硬链接</strong>通过inode的连接产生新的文件名，而不是新的文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">leiline@master:~/Documents/hadoop$ ln /usr/local/spark/spark-2.1.1-bin-hadoop2.7/sbin/start-all.sh .</span><br><span class="line"></span><br><span class="line">leiline@master:~/Documents/hadoop$ ll -i /usr/local/spark/spark-2.1.1-bin-hadoop2.7/sbin/start-all.sh start-all.sh </span><br><span class="line">1979627 -rwxr-xr-x 2 leiline root 1190 6月  26  2017 start-all.sh*</span><br><span class="line">1979627 -rwxr-xr-x 2 leiline root 1190 6月  26  2017 /usr/local/spark/spark-2.1.1-bin-hadoop2.7/sbin/start-all.sh*</span><br></pre></td></tr></table></figure>
+
+<p>首先创建spart-all.sh的硬链接，并使用 ll -i 命令查看两个文件的详细信息。其中第1个属性表示文件的inode号码，第3个属性表示文件连接个数。发现这两个文件的inode号码是相同的，且连接个数为2。</p>
+<img src="/images/hard_link.PNG" alt="硬链接原理" align="center">
+
+<p>如图，/etc/corntab和/root/corntab两个文件指向real块，有些像两个指针指向同一个内存块。</p>
+<p>硬链接的优点是 <strong>具有安全性</strong> ，也就是说对于指向数据块的文件，删除一个指向文件后数据块并不会被删除。</p>
+<p>硬链接的缺点是 <strong>不能跨文件系统</strong> 和 <strong>不能连接到目录</strong> 。</p>
+<p>特别是由于不能连接到目录的原因，因此它的应用广泛性比较有限。</p>
+<h2 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h2><p> <strong>软连接(symbolic link)</strong> 是创建一个独立的文件，而这个文件会让数据的读取指向它连接的那个文件的文件名。</p>
+<p>当源文件删除后，指向文件会打不开源文件的。因此软连接有些像windows里的快捷方式。</p>
+<img src="/images/symbolic_link.PNG" alt="软链接原理" align="center">
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">leiline@master:~/Documents/hadoop$ ln -s /usr/local/spark/spark-2.1.1-bin-hadoop2.7/sbin/start-all.sh start-all.sh</span><br><span class="line"></span><br><span class="line">leiline@master:~/Documents/hadoop$ ll start-all.sh </span><br><span class="line">lrwxrwxrwx 1 leiline leiline 60 4月  11 11:22 start-all.sh -&gt; /usr/local/spark/spark-2.1.1-bin-hadoop2.7/sbin/start-all.sh*</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从原理上看，软连接和硬链接的区别是连接文件的inode号码与源文件的inode号码是否相同。硬链接原理的理解类似于c中的变量指针指向内存空间。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="http://www.ruanyifeng.com/blog/2011/12/inode.html" target="_blank" rel="noopener">理解inode - 阮一峰的网络日志</a></li>
+<li>鸟哥的linux私房菜</li>
+</ol>
+<h1 id="sh-filename-与-filename的区别"><a href="#sh-filename-与-filename的区别" class="headerlink" title="sh filename 与 ./ filename的区别"></a>sh filename 与 ./ filename的区别</h1><p>在执行文件操作的时候，有的时候要用到sh命令，也有的时候只需要./就可以了，那么他们之间到底有什么区别那？</p>
+<blockquote>
+<p>如果.不在PATH里面，要执行当前目录下的可执行文件，使用全路径：./executable-file</p>
+<p>如果要执行一个sh脚本，不管那个脚本有没有可执行权限，都可以使用：sh [file]</p>
+<p>这时file是作为参数传给sh的，如果file不在当前目录下，也需要使用全路径。</p>
+</blockquote>
+<h1 id="修改dns"><a href="#修改dns" class="headerlink" title="修改dns"></a>修改dns</h1><p>修改dns有两种方式，一种是永久修改，另一种是临时修改，系统重启后自动失效。</p>
+<h2 id="临时设置"><a href="#临时设置" class="headerlink" title="临时设置"></a>临时设置</h2><p>打开/etc/resolv.conf 添加dns</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nameserver 4.4.4.4</span><br><span class="line">nameserver 8.8.8.8</span><br></pre></td></tr></table></figure>
+
+<p>保存退出，然后重启网卡</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/networking restart</span><br></pre></td></tr></table></figure>
+
+<p>打开浏览器测试一下就没有问题了。</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">leiline</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://yoursite.com/2018/04/11/linux-tips/">http://yoursite.com/2018/04/11/linux-tips/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/linux/">linux</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2018/04/12/friendly-blogs/"><i class="fa fa-chevron-left">  </i><span>一些博客备忘</span></a></div><div class="next-post pull-right"><a href="/2018/04/09/build-spark/"><span>在Ubuntu上编译spark</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2019 By leiline</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.6.1"></script><script src="/js/fancybox.js?version=1.6.1"></script><script src="/js/sidebar.js?version=1.6.1"></script><script src="/js/copy.js?version=1.6.1"></script><script src="/js/fireworks.js?version=1.6.1"></script><script src="/js/transition.js?version=1.6.1"></script><script src="/js/scroll.js?version=1.6.1"></script><script src="/js/head.js?version=1.6.1"></script><script>if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+}</script></body></html>

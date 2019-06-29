@@ -1,0 +1,85 @@
+<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="流式计算 -- jstorm"><meta name="keywords" content="jstorm"><meta name="author" content="leiline"><meta name="copyright" content="leiline"><title>流式计算 -- jstorm | 李林林的小站</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.6.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.6.1"><link rel="dns-prefetch" href="https://cdn.staticfile.org"><link rel="dns-prefetch" href="https://cdn.bootcss.com"><link rel="dns-prefetch" href="https://creativecommons.org"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#jstorm"><span class="toc-number">1.</span> <span class="toc-text">jstorm</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#jstorm安装"><span class="toc-number">2.</span> <span class="toc-text">jstorm安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#jstorm配置文件"><span class="toc-number">3.</span> <span class="toc-text">jstorm配置文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#jstorm结构"><span class="toc-number">4.</span> <span class="toc-text">jstorm结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#jstorm开发"><span class="toc-number">5.</span> <span class="toc-text">jstorm开发</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">leiline</div><div class="author-info__description text-center">知道你要去很远的地方，但请一定记得回头看看</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">35</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">16</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">3</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">李林林的小站</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus"><a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span></div><div id="post-info"><div id="post-title">流式计算 -- jstorm</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2018-06-13</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/technology/">technology</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>最近在看jstorm，结合其他的资料，记录一下。</p>
+<a id="more"></a>
+
+<h1 id="jstorm"><a href="#jstorm" class="headerlink" title="jstorm"></a>jstorm</h1><p>jstorm是阿里对storm重写的一个分布式实时流计算框架,相比较storm效率更高，而且对于storm代码，jstorm基本上可以兼容，因此国内很多公司采用jstorm进行流式计算。</p>
+<h1 id="jstorm安装"><a href="#jstorm安装" class="headerlink" title="jstorm安装"></a>jstorm安装</h1><p>jstorm安装比较简单，注意它需要依赖zookeeper，因此需要先安装zookeeper。</p>
+<p><a href="https://blog.csdn.net/gaokao2011/article/details/17020209" target="_blank" rel="noopener">Ubuntu下ZooKeeper安装过程</a></p>
+<p>zk服务启动命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zookeeper-3.4.3/bin/zkServer.sh start</span><br></pre></td></tr></table></figure>
+
+<p>zk客户端启动命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zookeeper-3.4.3/bin/zkCli.sh -server zookeeper:2181</span><br></pre></td></tr></table></figure>
+
+<p>注意这里的zookeeper要替换成<strong>zk服务主机名</strong>。</p>
+<p>接下来需要安装jstorm。</p>
+<p><a href="https://my.oschina.net/shyloveliyi/blog/789554" target="_blank" rel="noopener">jstorm2.1.1及jstorm webui安装</a></p>
+<p>在配置jstorm ui的时候，直接按照命令创建链接即可。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s jstorm-ui-2.1.1 ROOT</span><br></pre></td></tr></table></figure>
+
+<p>启动jstorm服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup jstorm nimbus &amp;</span><br><span class="line">nohup jstorm supervisor &amp;</span><br></pre></td></tr></table></figure>
+
+<p>启动jstorm ui的时候需要先启动tomcat服务，然后可以访问。</p>
+<h1 id="jstorm配置文件"><a href="#jstorm配置文件" class="headerlink" title="jstorm配置文件"></a>jstorm配置文件</h1><p>jstorm配置文件主要包括以下内容：</p>
+<ul>
+<li><p>storm.zookeeper.servers 连接zk服务器</p>
+</li>
+<li><p>storm.zookeeper.root 表示jstorm在zookeeper中的根目录，当多个JStorm共享一个ZOOKEEPER时，需要设置该选项，默认即为“/jstorm”</p>
+</li>
+<li><p>nimbus.host nimbus服务的地址</p>
+</li>
+<li><p>nimbus.host.start.supervisor 是否在nimbus节点启动supervisor服务（使用start.sh脚本启动时会使用此参数，使用jstorm脚本启动时 没有影响）</p>
+</li>
+<li><p>storm.local.dir：数据临时存储目录，目录需先手动创建好</p>
+</li>
+<li><p>jstorm.log.dir: 日志存储目录，目录需先手动创建好</p>
+</li>
+<li><p>supervisor.slots.ports.base：supervisor 执行worker使用的基本端口</p>
+</li>
+<li><p>supervisor.slots.ports：执行worker使用的端口，默认为四</p>
+</li>
+<li><p>supervisor.slots.port.cpu.weight：cpu权重 cpu_num = system_physical_cpu_num/supervisor.slots.port.cpu.weight</p>
+</li>
+<li><p>supervisor.slots.port.mem.weight：内存权重 mem_num = system_physical_memory_size/(worker.memory.size * supervisor.slots.port.mem.weight)</p>
+</li>
+<li><p>storm.messaging.netty.transfer.async.batch：如果此设置为真，netty处于异步模式，则netty将会批处理消息，如果此设置为false，netty在异步模式下，netty将把tuple一个一个地发送到一个大消息中</p>
+</li>
+<li><p>worker.memory.size： worker内存大小，单位是字节</p>
+</li>
+<li><p>topology.performance.metrics: 禁用时，不会收集定时器和直方图的数据</p>
+</li>
+<li><p>topology.alimonitor.metrics.post： 官方解释为：禁用时，指标数据只会被打印成日志。启动时，那数据除了打印到日志之外，还发布到alimonitor上。暂时没发现有什么影响</p>
+</li>
+</ul>
+<h1 id="jstorm结构"><a href="#jstorm结构" class="headerlink" title="jstorm结构"></a>jstorm结构</h1><p>jstorm有几个概念：</p>
+<ul>
+<li><p>topology</p>
+</li>
+<li><p>streams</p>
+</li>
+<li><p>spouts</p>
+</li>
+<li><p>bolts</p>
+</li>
+<li><p>stream groupings</p>
+</li>
+<li><p>reliability</p>
+</li>
+<li><p>tasks</p>
+</li>
+<li><p>workers</p>
+</li>
+</ul>
+<h1 id="jstorm开发"><a href="#jstorm开发" class="headerlink" title="jstorm开发"></a>jstorm开发</h1></div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">leiline</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://yoursite.com/2018/06/13/jstormpage/">http://yoursite.com/2018/06/13/jstormpage/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/jstorm/">jstorm</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2018/06/15/kafka-page/"><i class="fa fa-chevron-left">  </i><span>流式计算 -- 消息队列kafka</span></a></div><div class="next-post pull-right"><a href="/2018/06/10/shen-zhen-newer/"><span>深圳你好</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2019 By leiline</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.6.1"></script><script src="/js/fancybox.js?version=1.6.1"></script><script src="/js/sidebar.js?version=1.6.1"></script><script src="/js/copy.js?version=1.6.1"></script><script src="/js/fireworks.js?version=1.6.1"></script><script src="/js/transition.js?version=1.6.1"></script><script src="/js/scroll.js?version=1.6.1"></script><script src="/js/head.js?version=1.6.1"></script><script>if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+}</script></body></html>

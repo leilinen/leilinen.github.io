@@ -1,0 +1,140 @@
+<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="流式计算 -- 消息队列kafka"><meta name="keywords" content="kafka"><meta name="author" content="leiline"><meta name="copyright" content="leiline"><title>流式计算 -- 消息队列kafka | 李林林的小站</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.6.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.6.1"><link rel="dns-prefetch" href="https://cdn.staticfile.org"><link rel="dns-prefetch" href="https://cdn.bootcss.com"><link rel="dns-prefetch" href="https://creativecommons.org"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#走进kafka"><span class="toc-number">1.</span> <span class="toc-text">走进kafka</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配置kafka"><span class="toc-number">2.</span> <span class="toc-text">配置kafka</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kafka基本命令"><span class="toc-number">3.</span> <span class="toc-text">kafka基本命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kafka组件"><span class="toc-number">4.</span> <span class="toc-text">kafka组件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#分区的目的："><span class="toc-number">4.1.</span> <span class="toc-text">分区的目的：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#举个栗子"><span class="toc-number">5.</span> <span class="toc-text">举个栗子</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">leiline</div><div class="author-info__description text-center">知道你要去很远的地方，但请一定记得回头看看</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">35</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">16</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">3</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">李林林的小站</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus"><a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span></div><div id="post-info"><div id="post-title">流式计算 -- 消息队列kafka</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2018-06-15</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/technology/">technology</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>记录使用kafka过程中的一些心得。</p>
+<a id="more"></a>
+
+<h1 id="走进kafka"><a href="#走进kafka" class="headerlink" title="走进kafka"></a>走进kafka</h1><p>kafka是一个分布式流媒体平台，主要有三种功能：</p>
+<ul>
+<li><p>发布和订阅消息流，这个功能类似于消息队列;</p>
+</li>
+<li><p>以容错的方式记录消息流;</p>
+</li>
+<li><p>可以在消息发布的时候进行处理;</p>
+</li>
+</ul>
+<h1 id="配置kafka"><a href="#配置kafka" class="headerlink" title="配置kafka"></a>配置kafka</h1><p><a href="https://blog.csdn.net/a2639491403/article/details/80100365" target="_blank" rel="noopener">kafka安装及使用</a></p>
+<p>首先启动zk服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/zookeeper-server-start.sh config/zk.properties</span><br></pre></td></tr></table></figure>
+
+<p>然后启动kafka服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kafka-server-start.sh config/kafka1.properties</span><br></pre></td></tr></table></figure>
+
+<h1 id="kafka基本命令"><a href="#kafka基本命令" class="headerlink" title="kafka基本命令"></a>kafka基本命令</h1><ul>
+<li>查看有哪些主题</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-topics.sh --list --zookeeper 192.168.0.201:12181</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看topic的详细信息</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-topics.sh -zookeeper 127.0.0.1:2181 -describe -topic testKJ1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>为topic增加副本</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-reassign-partitions.sh -zookeeper 127.0.0.1:2181 -reassignment-json-file json/partitions-to-move.json -execute</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建topic</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testKJ1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>为topic增加partition</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kafka-topics.sh –zookeeper 127.0.0.1:2181 –alter –partitions 20 –topic testKJ1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>kafka生产者客户端命令</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-console-producer.sh --broker-list localhost:9092 --topic testKJ1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>kafka消费者客户端命令</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-console-consumer.sh -zookeeper localhost:2181 --from-beginning --topic testKJ1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>kafka服务启动</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-server-start.sh -daemon ../config/server.properties</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>下线broker</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./kafka-run-class.sh kafka.admin.ShutdownBroker --zookeeper 127.0.0.1:2181 --broker #brokerId# --num.retries 3 --retry.interval.ms 60</span><br><span class="line"></span><br><span class="line">shutdown broker</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>删除topic</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./kafka-run-class.sh kafka.admin.DeleteTopicCommand --topic testKJ1 --zookeeper 127.0.0.1:2181</span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --zookeeper localhost:2181 --delete --topic testKJ1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看consumer组内消费的offset</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./kafka-run-class.sh kafka.tools.ConsumerOffsetChecker --zookeeper localhost:2181 --group test --topic testKJ1</span><br><span class="line"></span><br><span class="line">./kafka-consumer-offset-checker.sh --zookeeper 192.168.0.201:12181 --group group1 --topic group1</span><br></pre></td></tr></table></figure>
+
+<h1 id="kafka组件"><a href="#kafka组件" class="headerlink" title="kafka组件"></a>kafka组件</h1><p>kafka有几大核心组件，</p>
+<ul>
+<li><p>Producer/producers 消息的生产者</p>
+</li>
+<li><p>Consumer/Consumers 消费者</p>
+</li>
+<li><p>Consumer Group </p>
+</li>
+<li><p>Broker  缓存代理</p>
+</li>
+</ul>
+<p>kafka 集群中的一台或者多台服务器统称为broker</p>
+<ul>
+<li><p>Topic 消息源的不同分类</p>
+</li>
+<li><p>Partition topic上的物理分组</p>
+</li>
+</ul>
+<p>消息生产者Producer将消息发送到kafka broker 的Topic中（每个topic中有多个消息）</p>
+<p>每个topic中消息增多，topic中的消息进行分区，使得consumer可快速定位消费消息，也可同时消费多个分区中的数据，提高了传输速率。</p>
+<ul>
+<li><p>Consumer Group</p>
+<p>消费者组里有多个消费者，每个消费者对应着不同partition分区中的数据处理。例如partition1的数据给Consumer 1，2给2，使得多个分区组成的topic由group中的多个consumer消费，也就是数据内部对相同message的并发处理。</p>
+</li>
+</ul>
+<ul>
+<li>Producers</li>
+</ul>
+<p>（1）消息生产者向kafka的一个topic中分布消息的过程kafka称为Producers</p>
+<p>（2）变相的负载均衡：把消息发给topic的哪个partition里，实现对消息的均衡分发</p>
+<p>（3）批量异步发送：producer和broker 两端（消息的客户端和服务端），不在一台服务器中，如果每产生一条消息就进行发送，建立一次网络连接，势必影响效率。Kafka的消息发送过程采取批量，异步发送。</p>
+<ul>
+<li>Broker</li>
+</ul>
+<p>（1）支持消息持久化：Broker没有副本备份，但kafka将消息进行持久化操作，以免丢失。当Consumer到kafka的broker中获取数据时，broker不会直接给consumer消费，而是把数据先保存到broker本地日志文件中（具体路径可配），每个Partition都会有一个log文件。另外日志的添加采用追加方式进行持久化，达到一个消息有序持久化效果。写入日志文件：缓存到一定阈值之后，再读写磁盘进行IO操作，提高性能</p>
+<p>（2）谁消费了message，由消费者确定和维护这类信息（具体有zookeeper记录维护），broker不保存。</p>
+<p>（5）消费时发生故障，kafka可快速定位到故障时没消费的那条数据。 consumer如何确定哪些消息是它没有消费的？zk来记录哪条消息消费情况，如何快速的找到没有消费的消息就涉及到kafka的稀疏索引机制。接下来再继续研究。</p>
+<ul>
+<li>Messge</li>
+</ul>
+<p>消息的3个属性： </p>
+<p>（1）Offset  偏移量   消息的唯一标识，通过该标识找到消息。</p>
+<p>（2）MessageSize 消息大小</p>
+<p>（3）data   消息本身</p>
+<ul>
+<li>Partition</li>
+</ul>
+<h2 id="分区的目的："><a href="#分区的目的：" class="headerlink" title="分区的目的："></a>分区的目的：</h2><p>（1）减缓日志文件占用磁盘空间</p>
+<p>大量消息，broker都要持久化到文件中，硬盘占用空间增大。分区将消息颗粒细分，每个partition可以存放在不同的硬盘空间中，避免单个broker中的topic文件侵占内存空间</p>
+<p>（2）不同的consumer同时处理partition中的数据</p>
+<p>Kafka中consumer与partition为 1：n的关系，即1个分区仅由1个消费者消费；1个消费者可以同时消费多个不同分区。分区细化消息粒度，消费者同时处理多个分区的越多，达到高效的消息并发处理。</p>
+<h1 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h1><p>kafka有丰富的组件和命令，以此为基础编程可以实现功能拓展。</p>
+<p>我们尝试运行代码 <a href="https://github.com/apache/kafka/tree/trunk/examples" target="_blank" rel="noopener">https://github.com/apache/kafka/tree/trunk/examples</a></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">leiline</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://yoursite.com/2018/06/15/kafka-page/">http://yoursite.com/2018/06/15/kafka-page/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/kafka/">kafka</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2018/08/26/trainning-feeling/"><i class="fa fa-chevron-left">  </i><span>入职培训及感悟</span></a></div><div class="next-post pull-right"><a href="/2018/06/13/jstormpage/"><span>流式计算 -- jstorm</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2019 By leiline</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.6.1"></script><script src="/js/fancybox.js?version=1.6.1"></script><script src="/js/sidebar.js?version=1.6.1"></script><script src="/js/copy.js?version=1.6.1"></script><script src="/js/fireworks.js?version=1.6.1"></script><script src="/js/transition.js?version=1.6.1"></script><script src="/js/scroll.js?version=1.6.1"></script><script src="/js/head.js?version=1.6.1"></script><script>if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+}</script></body></html>

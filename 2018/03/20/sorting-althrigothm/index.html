@@ -1,0 +1,117 @@
+<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="排序算法总结"><meta name="keywords" content="althrigothm"><meta name="author" content="leiline"><meta name="copyright" content="leiline"><title>排序算法总结 | 李林林的小站</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.6.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.6.1"><link rel="dns-prefetch" href="https://cdn.staticfile.org"><link rel="dns-prefetch" href="https://cdn.bootcss.com"><link rel="dns-prefetch" href="https://creativecommons.org"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#选择排序"><span class="toc-number">1.</span> <span class="toc-text">选择排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#插入排序"><span class="toc-number">2.</span> <span class="toc-text">插入排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shell排序"><span class="toc-number">3.</span> <span class="toc-text">Shell排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#快速排序"><span class="toc-number">4.</span> <span class="toc-text">快速排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#评价"><span class="toc-number">5.</span> <span class="toc-text">评价</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">leiline</div><div class="author-info__description text-center">知道你要去很远的地方，但请一定记得回头看看</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">35</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">16</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">3</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">李林林的小站</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus"><a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span></div><div id="post-info"><div id="post-title">排序算法总结</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2018-03-20</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/technology/">technology</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>总结常用的几种排序算法</p>
+<a id="more"></a>
+
+<p>常用的几种排序算法主要有：选择排序，插入排序，Shell排序，归并排序，快速排序。</p>
+<p>首先需要定义在排序过程中常用的方法，比较方法和交换方法。</p>
+<p>比较方法比较两个元素更小的值，并返回布尔值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">less</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a&lt;b? <span class="keyword">true</span>:<span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>交换方法对数组中的两个元素交换位置。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">exch</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> temp = a[i];</span><br><span class="line">    a[i] = a[j];</span><br><span class="line">    a[j] = temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后将结果进行输出。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">PrintArray</span><span class="params">(<span class="keyword">int</span>[] a)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Integer e: a)&#123;</span><br><span class="line">        System.out.print(e +<span class="string">" "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(<span class="string">" "</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h2><p>选择排序是比较简单的一种排序方法，其思想是<strong>找到数组中最小的元素，与第一位元素交换位置，继续在剩下的元素中找到最小的元素与第二个元素交换位置。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SelectionSorting</span><span class="params">(<span class="keyword">int</span>[] a)</span></span>&#123;</span><br><span class="line">       <span class="keyword">int</span> N = a.length;</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;N; i++)&#123;</span><br><span class="line">           <span class="keyword">int</span> min = i;</span><br><span class="line">           <span class="keyword">for</span>(<span class="keyword">int</span> j=i; j&lt;N; j++)&#123;</span><br><span class="line">               <span class="keyword">if</span>(less(a[j], a[min]))</span><br><span class="line">                   min = j;</span><br><span class="line">               exch(a, i, min);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       System.out.println(<span class="string">"Selection Sorting: "</span>);</span><br><span class="line">       PrintArray(a);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><p>插入排序的方法比较类似于插扑克牌，从数组的第一个元素开始遍历，对于下一个元素，寻找合适的位置插入进去。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Insertion</span><span class="params">(<span class="keyword">int</span> [] a)</span></span>&#123;</span><br><span class="line">      <span class="keyword">int</span> N = a.length;</span><br><span class="line">      <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;N; i++)&#123;</span><br><span class="line">          <span class="keyword">for</span>(<span class="keyword">int</span> j=i; j&gt;<span class="number">0</span> &amp;&amp; less(a[j], a[j-<span class="number">1</span>]); j--)&#123;</span><br><span class="line">              exch(a, j, j-<span class="number">1</span>);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      System.out.println(<span class="string">"Insertion Sorting: "</span>);</span><br><span class="line">      PrintArray(a);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码中，第二个for循环在以排序的元素序列从后往前依次移动，直到对比的元素找到合适的位置。</p>
+<h2 id="Shell排序"><a href="#Shell排序" class="headerlink" title="Shell排序"></a>Shell排序</h2><p>Shell排序是一种插入排序的改进算法。</p>
+<p>Shell排序的思想是数组中任意间隔为h的元素都是有序的，每一次循环完毕后，h的值都会减小，直到h=1</p>
+<p><img src="http://img.blog.csdn.net/20170507113423076?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpbGluZQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="shell排序过程"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Shell</span><span class="params">(<span class="keyword">int</span>[] a)</span></span>&#123;</span><br><span class="line">     <span class="keyword">int</span> N = a.length;</span><br><span class="line">     <span class="keyword">int</span> h = <span class="number">1</span>;</span><br><span class="line">     <span class="keyword">while</span>(h &lt; N/<span class="number">3</span>)&#123;</span><br><span class="line">         h = <span class="number">3</span>*h + <span class="number">1</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">while</span>(h &gt;=<span class="number">1</span>)&#123;</span><br><span class="line">         <span class="keyword">for</span>(<span class="keyword">int</span> i=h; i&lt;N; i++)&#123;</span><br><span class="line">             <span class="keyword">for</span>(<span class="keyword">int</span> j=i; j&gt;=h&amp;&amp;less(a[j], a[j-h]); j-=h)&#123;</span><br><span class="line">                 exch(a, j, j-h);</span><br><span class="line">             &#125;</span><br><span class="line">             h = h/<span class="number">3</span>;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">     &#125;</span><br><span class="line">     System.out.println(<span class="string">"Shell Sorting: "</span>);</span><br><span class="line">     PrintArray(a);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Shell可以用于大型数组，它对任意排序的数据表现也是非常好的，它比插入排序和选择排序的效果要好，而且数组越大，优势越加明显。</p>
+<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2><p>快速排序是应用最广泛的一种排序方法。它的思想是基于分治的排序算法，将一个数组分成两个子数组，将两部分分别独立排序。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Quick</span><span class="params">(<span class="keyword">int</span>[] a)</span></span>&#123;</span><br><span class="line">     Quick(a, <span class="number">0</span>, a.length-<span class="number">1</span>);</span><br><span class="line">     System.out.println(<span class="string">"Quick Sorting: "</span>);</span><br><span class="line">     PrintArray(a);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Quick</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> lo, <span class="keyword">int</span> hi)</span></span>&#123;</span><br><span class="line">     <span class="keyword">if</span>(lo &gt;= hi) <span class="keyword">return</span> ;</span><br><span class="line">     <span class="keyword">int</span> j = partition(a, lo, hi);</span><br><span class="line">     Quick(a, lo, j-<span class="number">1</span>);  <span class="comment">// a[lo, ..., j-1]部分排序</span></span><br><span class="line">     Quick(a, j+<span class="number">1</span>, hi);  <span class="comment">// a[j+1, ..., hi]部分排序</span></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> lo, <span class="keyword">int</span> hi)</span></span>&#123;</span><br><span class="line">     <span class="keyword">int</span> i = lo, j = hi+<span class="number">1</span>;</span><br><span class="line">     <span class="keyword">int</span> v = a[lo];</span><br><span class="line">     <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">         <span class="keyword">while</span>(less(a[++i], v))&#123;</span><br><span class="line">             <span class="keyword">if</span>(i==hi) <span class="keyword">break</span>;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">while</span>(less(v, a[--j]))&#123;</span><br><span class="line">             <span class="keyword">if</span>(j==lo) <span class="keyword">break</span>;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="keyword">if</span>(i&gt;=j) <span class="keyword">break</span>;</span><br><span class="line">         exch(a, i, j);</span><br><span class="line">     &#125;</span><br><span class="line">     exch(a, lo, j);</span><br><span class="line">     <span class="keyword">return</span> j;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="评价"><a href="#评价" class="headerlink" title="评价"></a>评价</h2><p>最后，对各种算法进行一个比较。</p>
+<table>
+<thead>
+<tr>
+<th align="center">算法</th>
+<th align="center">是否稳定</th>
+<th align="center">是否为原地排序</th>
+<th align="center">时间复杂度</th>
+<th align="right">空间复杂度</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">选择排序</td>
+<td align="center">否</td>
+<td align="center">是</td>
+<td align="center">N2</td>
+<td align="right">1</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">插入排序</td>
+<td align="center">是</td>
+<td align="center">是</td>
+<td align="center">介于N和N2之间</td>
+<td align="right">1</td>
+<td>取决于输入元素的排序情况</td>
+</tr>
+<tr>
+<td align="center">希尔排序</td>
+<td align="center">否</td>
+<td align="center">是</td>
+<td align="center">NlogN</td>
+<td align="right">1</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">快速排序</td>
+<td align="center">否</td>
+<td align="center">是</td>
+<td align="center">N6/5</td>
+<td align="right">lgN</td>
+<td>运行效率由概率提供保证</td>
+</tr>
+<tr>
+<td align="center">三向快速排序</td>
+<td align="center">否</td>
+<td align="center">是</td>
+<td align="center">介于N和NlogN之间</td>
+<td align="right">lgN</td>
+<td>运行效率由概率保证，同时也取决于输入元素的分布情况</td>
+</tr>
+<tr>
+<td align="center">归并排序</td>
+<td align="center">是</td>
+<td align="center">否</td>
+<td align="center">NlogN</td>
+<td align="right">N</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">堆排序</td>
+<td align="center">否</td>
+<td align="center">是</td>
+<td align="center">NlogN</td>
+<td align="right">1</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>根据上表可以看出：</p>
+<ol>
+<li>只有插入排序和归并排序具有稳定的特点。</li>
+<li>只有归并排序不具有原地排序的特点。</li>
+</ol>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">leiline</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://yoursite.com/2018/03/20/sorting-althrigothm/">http://yoursite.com/2018/03/20/sorting-althrigothm/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/althrigothm/">althrigothm</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2018/03/22/submit-mapreduce-in-hadoop-cluster/"><i class="fa fa-chevron-left">  </i><span>hadoop集群提交代码</span></a></div><div class="next-post pull-right"><a href="/2018/03/20/leetcode-code-binary-tree/"><span>二叉树相关算法</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2019 By leiline</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.6.1"></script><script src="/js/fancybox.js?version=1.6.1"></script><script src="/js/sidebar.js?version=1.6.1"></script><script src="/js/copy.js?version=1.6.1"></script><script src="/js/fireworks.js?version=1.6.1"></script><script src="/js/transition.js?version=1.6.1"></script><script src="/js/scroll.js?version=1.6.1"></script><script src="/js/head.js?version=1.6.1"></script><script>if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+}</script></body></html>

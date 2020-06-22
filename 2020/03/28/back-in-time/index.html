@@ -16,7 +16,8 @@
 <h2 id="savepoint"><a href="#savepoint" class="headerlink" title="savepoint"></a>savepoint</h2><p>savepoint是一种特殊的checkpoint, 记录了任务的全量数据，由用户手动触发，一般会保存在HDFS中。当任务重启时，可以指定savepoint，读取savepoint的状态，从当前savepoint开始运行。</p>
 <p>在持续计算的过程中，会经常遇到因为一些问题到重新消费数据的情况。我们可以通过savepoint实现任务重启到某一个时间点进行重新计算。我们设计了一个系统来实现这一功能。</p>
 <h2 id="实现时光倒流"><a href="#实现时光倒流" class="headerlink" title="实现时光倒流"></a>实现时光倒流</h2><p>Flink任务时光倒流的机制，就是借助savepoint，从指定的savepoint位置重新运行。为了实现Flink任务时光倒流的目标，我们做了一个打点系统：</p>
-<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4d6feda4-3466-49dc-8f52-f5c0a209964c/2020-03-185.59.14.png" alt="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4d6feda4-3466-49dc-8f52-f5c0a209964c/2020-03-185.59.14.png"></p>
+<img src="/images/time recall.PNG">
+
 <p>Flink任务在运行的时候，我们的打点程序会定期请求任务的savepoint，并把Savepoint文件存储到指定的路径下。</p>
 <pre><code>// 生成savepoint的命令
 nohup flink savepoint {job_id} {savepoint_path} -yid {application_id}</code></pre><p>为了满足高可用的需求，我们允许Flink任务可以提交到不同集群上。同样在切换集群的时候，我们也要支持Flink任务时光倒流。所以这时需要一个定时任务，可以将hdfs1上的savepoint文件同步到hdfs2上。实现这个功能有比较多的解决办法，我们采用的是distcp命令进行同步。</p>
